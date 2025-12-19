@@ -21,18 +21,24 @@ function getHumanChoice() {
 let humanScore = 0;
 let computerScore = 0;
 
+let resultsBox = document.getElementById("resultsBox");
+let humanScoreBox = document.getElementById("score");
+let compScoreBox = document.getElementById("compScore");
+
 function declareWinner(humanChoice, computerChoice) {
-    console.log(`You win! ${humanChoice} beats ${computerChoice}`);
+    resultsBox.textContent = `You win! ${humanChoice} beats ${computerChoice}`;
     humanScore++;
+    humanScoreBox.textContent = humanScore;
 }
 
 function declareLoser(humanChoice, computerChoice) {
-    console.log(`You lose! ${humanChoice} is defeated by ${computerChoice}`);
+    resultsBox.textContent = `You lose! ${humanChoice} is defeated by ${computerChoice}`;
     computerScore++;
+    compScoreBox.textContent = computerScore;
 }
 
 function declareTie(humanChoice, computerChoice) {
-    console.log(`Tie! You both chose ${humanChoice}`);
+    resultsBox.textContent = `Tie! You both chose ${humanChoice}`;
 }
 
 
@@ -73,16 +79,47 @@ function playRound(humanChoice, computerChoice) {
         }
     }
 
+    if (humanScore >=5 || computerScore >=5) {
+        if (humanScore > computerScore) {
+            resultsBox.textContent = `You win ${humanScore} - ${computerScore}!`;
+        } else {
+            resultsBox.textContent = `Computer wins ${computerScore} - ${humanScore}!`
+        }
+
+        for (item of choices) {
+            item.removeEventListener("click", buttonChoice);
+            item.disabled = true;
+        } 
+    }
+
 }
 
-function playGame() {
-    playRound(getHumanChoice(), getComputerChoice());
-    playRound(getHumanChoice(), getComputerChoice());
-    playRound(getHumanChoice(), getComputerChoice());
-    playRound(getHumanChoice(), getComputerChoice());
-    playRound(getHumanChoice(), getComputerChoice());
+// function playGame() {
+//     playRound(getHumanChoice(), getComputerChoice());
+//     playRound(getHumanChoice(), getComputerChoice());
+//     playRound(getHumanChoice(), getComputerChoice());
+//     playRound(getHumanChoice(), getComputerChoice());
+//     playRound(getHumanChoice(), getComputerChoice());
+// }
+
+// playGame();
+// console.log(`Your score: ${humanScore}`);
+// console.log(`Computer score: ${computerScore}`);
+
+let choices = [
+    document.getElementById("rock"),
+    document.getElementById("paper"),
+    document.getElementById("scissors")
+]
+
+let buttonChoice = (e) => {
+    playRound(item.id, getComputerChoice());
+    e.stopPropagation();
 }
 
-playGame();
-console.log(`Your score: ${humanScore}`);
-console.log(`Computer score: ${computerScore}`);
+for (item of choices) {
+    item.addEventListener("click", buttonChoice);
+}
+
+
+
